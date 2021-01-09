@@ -14,6 +14,7 @@ namespace DailyTasksLogger
     public partial class Form3 : Form
     {
         private TextBox multilineTxtBox;
+        Dictionary<string, string> dayDateValuePair = new Dictionary<string, string>();
         public Form3()
         {
             InitializeComponent();
@@ -29,6 +30,8 @@ namespace DailyTasksLogger
 
             foreach (DailyTasks dailyTask in tasksForTheWeek)
             {
+                dayDateValuePair.Add(dailyTask.Day.ToString(), dailyTask.Day.ToString() + "(" + Helper.DateTimeHelper.GetDateTimeString(dailyTask.Day) + ")");
+                
                 multilineTxtBox.Text += dailyTask.Day.ToString() + "("+ Helper.DateTimeHelper.GetDateTimeString(dailyTask.Day) +")" + Environment.NewLine;
                 multilineTxtBox.Text += dailyTask.TasksForTheDay + Environment.NewLine + Environment.NewLine;
             }
@@ -44,17 +47,76 @@ namespace DailyTasksLogger
 
         private void Form3_FormClosing(object sender, FormClosingEventArgs e)
         {
+            string mondayDate = "";
+            string tuesdayDate = "";
+            string wednesdayDate = "";
+            string thursdayDate = "";
+            string fridayDate = "";
+            dayDateValuePair.TryGetValue("Monday", out mondayDate);
+            dayDateValuePair.TryGetValue("Tuesday", out tuesdayDate);
+            dayDateValuePair.TryGetValue("Wednesday", out wednesdayDate);
+            dayDateValuePair.TryGetValue("Thursday", out thursdayDate);
+            dayDateValuePair.TryGetValue("Friday", out fridayDate);
+
             //Monday
-            var a = multilineTxtBox.Text.Split(')')[1];
-            var b = a.Split(new String[1] { "Tuesday" }, 1000, StringSplitOptions.RemoveEmptyEntries);
+            var mondayTasks = multilineTxtBox.Text.Split(new string[1] { mondayDate }, 1000, StringSplitOptions.None)[1];
+            mondayTasks = mondayTasks.Substring(2, mondayTasks.Length - 2);
+            mondayTasks = mondayTasks.Split(new string[1] { tuesdayDate }, 1000, StringSplitOptions.None)[0];
+            mondayTasks = mondayTasks.Substring(0, mondayTasks.Length - 4);
 
             //Tuesday
+            var tuesdayTasks = multilineTxtBox.Text.Split(new string[1] { tuesdayDate }, 1000, StringSplitOptions.None)[1];
+            tuesdayTasks = tuesdayTasks.Substring(2, tuesdayTasks.Length - 2);
+            tuesdayTasks = tuesdayTasks.Split(new string[1] { wednesdayDate }, 1000, StringSplitOptions.None)[0];
+            tuesdayTasks = tuesdayTasks.Substring(0, tuesdayTasks.Length - 4);
 
             //Wednesday
+            var wednesdayTasks = multilineTxtBox.Text.Split(new string[1] { wednesdayDate }, 1000, StringSplitOptions.None)[1];
+            wednesdayTasks = wednesdayTasks.Substring(2, wednesdayTasks.Length - 2);
+            wednesdayTasks = wednesdayTasks.Split(new string[1] { thursdayDate }, 1000, StringSplitOptions.None)[0];
+            wednesdayTasks = wednesdayTasks.Substring(0, wednesdayTasks.Length - 4);
 
             //Thursday
+            var thursdayTasks = multilineTxtBox.Text.Split(new string[1] { thursdayDate }, 1000, StringSplitOptions.None)[1];
+            thursdayTasks = thursdayTasks.Substring(2, thursdayTasks.Length - 2);
+            thursdayTasks = thursdayTasks.Split(new string[1] { fridayDate }, 1000, StringSplitOptions.None)[0];
+            thursdayTasks = thursdayTasks.Substring(0, thursdayTasks.Length - 4);
 
             //Friday
+            var fridayTasks = multilineTxtBox.Text.Split(new string[1] { fridayDate }, 1000, StringSplitOptions.None)[1];
+            fridayTasks = fridayTasks.Substring(2, fridayTasks.Length - 2);
+            fridayTasks = fridayTasks.Substring(0, fridayTasks.Length - 4);
+
+            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                new DailyTasks 
+                { 
+                    Day = DayOfWeek.Monday, 
+                    TasksForTheDay = mondayTasks 
+                });
+            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                new DailyTasks
+                {
+                    Day = DayOfWeek.Tuesday,
+                    TasksForTheDay = tuesdayTasks
+                });
+            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                new DailyTasks
+                {
+                    Day = DayOfWeek.Wednesday,
+                    TasksForTheDay = wednesdayTasks
+                });
+            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                new DailyTasks
+                {
+                    Day = DayOfWeek.Thursday,
+                    TasksForTheDay = thursdayTasks
+                });
+            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                new DailyTasks
+                {
+                    Day = DayOfWeek.Friday,
+                    TasksForTheDay = fridayTasks
+                });
         }
     }
 }
