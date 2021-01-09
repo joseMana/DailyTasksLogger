@@ -13,11 +13,12 @@ namespace DailyTasksLogger
 {
     public partial class Form3 : Form
     {
+        private TextBox multilineTxtBox;
         public Form3()
         {
             InitializeComponent();
 
-            TextBox multilineTxtBox = new TextBox();
+            multilineTxtBox = new TextBox();
             multilineTxtBox.Location = new System.Drawing.Point(13, 30);
             multilineTxtBox.Multiline = true;
             multilineTxtBox.Size = new System.Drawing.Size(418, 173);
@@ -39,6 +40,21 @@ namespace DailyTasksLogger
             multilineTxtBox.Height = multilineTxtBox.Font.Height * numLines + padding + border;
 
             this.Controls.Add(multilineTxtBox);
+        }
+
+        private void Form3_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Monday
+            var a = multilineTxtBox.Text.Split(')')[1];
+            var b = a.Split(new String[1] { "Tuesday" }, 1000, StringSplitOptions.RemoveEmptyEntries);
+
+            //Tuesday
+
+            //Wednesday
+
+            //Thursday
+
+            //Friday
         }
     }
 }

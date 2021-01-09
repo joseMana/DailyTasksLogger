@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.SuspendLayout();
             // 
             // Form3
             // 
@@ -37,6 +38,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Form3";
             this.Text = "Daily Tasks Summary [Bulk Edit]";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form3_FormClosing);
             this.ResumeLayout(false);
 
         }
