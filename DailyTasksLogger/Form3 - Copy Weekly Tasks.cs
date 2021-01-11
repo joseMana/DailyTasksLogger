@@ -47,16 +47,11 @@ namespace DailyTasksLogger
 
         private void Form3_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string mondayDate = "";
-            string tuesdayDate = "";
-            string wednesdayDate = "";
-            string thursdayDate = "";
-            string fridayDate = "";
-            dayDateValuePair.TryGetValue("Monday", out mondayDate);
-            dayDateValuePair.TryGetValue("Tuesday", out tuesdayDate);
-            dayDateValuePair.TryGetValue("Wednesday", out wednesdayDate);
-            dayDateValuePair.TryGetValue("Thursday", out thursdayDate);
-            dayDateValuePair.TryGetValue("Friday", out fridayDate);
+            string mondayDate = ""; dayDateValuePair.TryGetValue("Monday", out mondayDate);
+            string tuesdayDate = ""; dayDateValuePair.TryGetValue("Tuesday", out tuesdayDate);
+            string wednesdayDate = ""; dayDateValuePair.TryGetValue("Wednesday", out wednesdayDate);
+            string thursdayDate = ""; dayDateValuePair.TryGetValue("Thursday", out thursdayDate);
+            string fridayDate = ""; dayDateValuePair.TryGetValue("Friday", out fridayDate);
 
             //Monday
             var mondayTasks = multilineTxtBox.Text.Split(new string[1] { mondayDate }, 1000, StringSplitOptions.None)[1];
