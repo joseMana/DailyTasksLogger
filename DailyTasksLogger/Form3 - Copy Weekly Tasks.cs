@@ -15,6 +15,7 @@ namespace DailyTasksLogger
     {
         private TextBox multilineTxtBox;
         Dictionary<string, string> dayDateValuePair = new Dictionary<string, string>();
+        Tuple<string, string, string> dayDateTuple = new Tuple<string, string, string>("Qwe", "qwe", "123");
         public Form3()
         {
             InitializeComponent();
@@ -47,71 +48,61 @@ namespace DailyTasksLogger
 
         private void Form3_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string mondayDate = ""; dayDateValuePair.TryGetValue("Monday", out mondayDate);
-            string tuesdayDate = ""; dayDateValuePair.TryGetValue("Tuesday", out tuesdayDate);
-            string wednesdayDate = ""; dayDateValuePair.TryGetValue("Wednesday", out wednesdayDate);
-            string thursdayDate = ""; dayDateValuePair.TryGetValue("Thursday", out thursdayDate);
-            string fridayDate = ""; dayDateValuePair.TryGetValue("Friday", out fridayDate);
+            string tasks;
+            string dayDate;
+            foreach(var dayDateValue in dayDateValuePair.Keys)
+            {
+                if (dayDateValuePair.TryGetValue(dayDateValue, out dayDate) && !dayDate.Contains("Friday"))
+                {
+                    tasks = multilineTxtBox.Text.Split(new string[1] { dayDate }, 1000, StringSplitOptions.None)[1];
+                    tasks = tasks.Substring(2, tasks.Length - 2);
 
-            //Monday
-            var mondayTasks = multilineTxtBox.Text.Split(new string[1] { mondayDate }, 1000, StringSplitOptions.None)[1];
-            mondayTasks = mondayTasks.Substring(2, mondayTasks.Length - 2);
-            mondayTasks = mondayTasks.Split(new string[1] { tuesdayDate }, 1000, StringSplitOptions.None)[0];
-            mondayTasks = mondayTasks.Substring(0, mondayTasks.Length - 4);
+                    string dayDate2;
+                    dayDateValuePair.TryGetValue(GetNextDay(dayDate), out dayDate2);
+                    tasks = tasks.Split(new string[1] { dayDate2 }, 1000, StringSplitOptions.None)[0];
+                    
+                    tasks = tasks.Substring(0, tasks.Length - 4);
+                }
+                else
+                {
+                    //Friday
+                    tasks = multilineTxtBox.Text.Split(new string[1] { dayDate }, 1000, StringSplitOptions.None)[1];
+                    tasks = tasks.Substring(2, tasks.Length - 2);
+                    tasks = tasks.Substring(0, tasks.Length - 4);
+                }
 
-            //Tuesday
-            var tuesdayTasks = multilineTxtBox.Text.Split(new string[1] { tuesdayDate }, 1000, StringSplitOptions.None)[1];
-            tuesdayTasks = tuesdayTasks.Substring(2, tuesdayTasks.Length - 2);
-            tuesdayTasks = tuesdayTasks.Split(new string[1] { wednesdayDate }, 1000, StringSplitOptions.None)[0];
-            tuesdayTasks = tuesdayTasks.Substring(0, tuesdayTasks.Length - 4);
-
-            //Wednesday
-            var wednesdayTasks = multilineTxtBox.Text.Split(new string[1] { wednesdayDate }, 1000, StringSplitOptions.None)[1];
-            wednesdayTasks = wednesdayTasks.Substring(2, wednesdayTasks.Length - 2);
-            wednesdayTasks = wednesdayTasks.Split(new string[1] { thursdayDate }, 1000, StringSplitOptions.None)[0];
-            wednesdayTasks = wednesdayTasks.Substring(0, wednesdayTasks.Length - 4);
-
-            //Thursday
-            var thursdayTasks = multilineTxtBox.Text.Split(new string[1] { thursdayDate }, 1000, StringSplitOptions.None)[1];
-            thursdayTasks = thursdayTasks.Substring(2, thursdayTasks.Length - 2);
-            thursdayTasks = thursdayTasks.Split(new string[1] { fridayDate }, 1000, StringSplitOptions.None)[0];
-            thursdayTasks = thursdayTasks.Substring(0, thursdayTasks.Length - 4);
-
-            //Friday
-            var fridayTasks = multilineTxtBox.Text.Split(new string[1] { fridayDate }, 1000, StringSplitOptions.None)[1];
-            fridayTasks = fridayTasks.Substring(2, fridayTasks.Length - 2);
-            fridayTasks = fridayTasks.Substring(0, fridayTasks.Length - 4);
-
-            Helper.SQLLiteDBHelper.UpdateTasksForDay(
-                new DailyTasks 
-                { 
-                    Day = DayOfWeek.Monday, 
-                    TasksForTheDay = mondayTasks 
-                });
-            Helper.SQLLiteDBHelper.UpdateTasksForDay(
+                Helper.SQLLiteDBHelper.UpdateTasksForDay(
                 new DailyTasks
                 {
-                    Day = DayOfWeek.Tuesday,
-                    TasksForTheDay = tuesdayTasks
+                    Day = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayDateValue),
+                    TasksForTheDay = tasks
                 });
-            Helper.SQLLiteDBHelper.UpdateTasksForDay(
-                new DailyTasks
-                {
-                    Day = DayOfWeek.Wednesday,
-                    TasksForTheDay = wednesdayTasks
-                });
-            Helper.SQLLiteDBHelper.UpdateTasksForDay(
-                new DailyTasks
-                {
-                    Day = DayOfWeek.Thursday,
-                    TasksForTheDay = thursdayTasks
-                });
-            Helper.SQLLiteDBHelper.UpdateTasksForDay(
-                new DailyTasks
-                {
-                    Day = DayOfWeek.Friday,
-                    TasksForTheDay = fridayTasks
-                });
+            }
+        }
+
+        private string GetNextDay(string dayDate)
+        {
+            if (dayDate.Contains("Monday"))
+            {
+                return "Tuesday";
+            }
+            else if (dayDate.Contains("Tuesday"))
+            {
+                return "Wednesday";
+            }
+            else if (dayDate.Contains("Wednesday"))
+            {
+                return "Thursday";
+            }
+            else if (dayDate.Contains("Thursday"))
+            {
+                return "Friday";
+            }
+            else if (dayDate.Contains("Friday"))
+            {
+                return "Tuesday";
+            }
+            return "";
         }
     }
 }
