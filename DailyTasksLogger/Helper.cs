@@ -14,18 +14,19 @@ namespace DailyTasksLogger
     {
         public static string connectionString = @"Data Source=C:\Users\JosephM\source\repos\DailyTasksLogger\DailyTasksLogger\DB.db";
 
-        #region Method Delegator
-        public static bool IsDelegateTriggered;
-        public static Form FormToDelegate;
-        public static Form FormToDelegateSetter
+        public static class Delegator
         {
-            set
+            public static bool IsDelegateTriggered;
+            public static Form FormToDelegate;
+            public static Form FormToDelegateSetter
             {
-                FormToDelegate = value;
-                IsDelegateTriggered = true;
+                set
+                {
+                    FormToDelegate = value;
+                    IsDelegateTriggered = true;
+                }
             }
         }
-        #endregion
 
         public static class TextBoxHelper
         {

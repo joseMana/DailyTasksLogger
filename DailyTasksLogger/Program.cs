@@ -49,11 +49,11 @@ namespace DailyTasksLogger
             {
                 while (1==1)
                 {
-                    if (Helper.IsDelegateTriggered)
+                    if (Helper.Delegator.IsDelegateTriggered)
                     {
-                        InitializeForm(Helper.FormToDelegate);
+                        InitializeForm(Helper.Delegator.FormToDelegate);
                     }
-                    Thread.Sleep(1000);
+                    Thread.Sleep(1500);
                 }
             });
             _delagatorThread.SetApartmentState(ApartmentState.STA);
@@ -61,7 +61,6 @@ namespace DailyTasksLogger
         }
         public static void InitializeForm(Form form)
         {
-
             if (form is Form1)
             {
                 Application.Run(form);
@@ -75,7 +74,7 @@ namespace DailyTasksLogger
                 Application.Run(new Form3());
             }
 
-            Helper.IsDelegateTriggered = false;
+            Helper.Delegator.IsDelegateTriggered = false;
         }
     }
 }

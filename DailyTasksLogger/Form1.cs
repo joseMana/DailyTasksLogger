@@ -25,11 +25,11 @@ namespace DailyTasksLogger
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            Helper.FormToDelegateSetter = new Form2();
+            Helper.Delegator.FormToDelegateSetter = new Form2();
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            Helper.FormToDelegateSetter = new Form3();
+            Helper.Delegator.FormToDelegateSetter = new Form3();
         }
         private void button3_Click(object sender, EventArgs e)
         {
